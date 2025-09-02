@@ -1,0 +1,137 @@
+# dynamic.yml - For external server routing
+http:
+  routers:
+    traefik-dashboard:
+      rule: "Host(`traefik.gkibria121.com`)"
+      service: api@internal
+      entryPoints:
+        - web
+      middlewares:
+        - dashboard-auth
+    coolify-router:
+      rule: "Host(`coolify.gkibria121.com`)"
+      service: coolify-service
+      entryPoints:
+        - web   
+      middlewares:
+        - default-headers
+    console-router:
+      rule: "Host(`console.gkibria121.com`)"
+      service: console-service
+      entryPoints:
+        - web    
+      middlewares:
+        - console-headers
+        - websocket-headers
+    docker-router:
+      rule: "Host(`docker.gkibria121.com`)"
+      service: docker-service
+      entryPoints:
+        - web    
+      middlewares:
+        - console-headers
+        - websocket-headers   
+    proxmox-router:
+      rule: "Host(`proxmox.gkibria121.com`)"
+      service: proxmox-service
+      entryPoints:
+        - web    
+      middlewares:
+        - console-headers
+        - websocket-headers 
+
+    npm-router:
+      rule: "Host(`npm.gkibria121.com`)"
+      service: npm-service
+      entryPoints:
+        - web   
+      middlewares:
+        - default-headers
+
+  middlewares:
+    dashboard-auth:
+      basicAuth:
+        users:
+          # Username: gkibria, Password: gkibria121
+          - "gkibria:$2a$12$9oL8WfpQpYk15RAYUEnic.71Ai4l5UAyq33YC8iCej5oISivMn37u"
+    default-headers:
+      headers:
+        frameDeny: true
+        sslRedirect: false
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 31536000
+    console-headers:
+      headers:
+        # Allow framing for Cockpit web console
+        frameDeny: false
+        sslRedirect: false
+        browserXssFilter: false
+        contentTypeNosniff: false
+        # Remove restrictive CSP and frame options
+        customResponseHeaders:
+          X-Frame-Options: ""
+          Content-Security-Policy: ""
+    websocket-headers:
+      headers:
+        customRequestHeaders:
+          Connection: "upgrade"
+          Upgrade: "websocket"
+        customResponseHeaders:
+          Connection: "upgrade"
+          Upgrade: "websocket"
+
+  services:
+    coolify-service:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.100:8000"
+        healthCheck:
+          path: "/"
+          interval: "30s"
+          timeout: "3s"
+    console-service:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.0.103:9090"
+        serversTransport: "insecure-transport"
+        passHostHeader: true
+        healthCheck:
+          path: "/"
+          interval: "30s"
+          timeout: "3s"
+    docker-service:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.0.188:9443"
+        serversTransport: "insecure-transport"
+        passHostHeader: true
+        healthCheck:
+          path: "/"
+          interval: "30s"
+          timeout: "3s"
+    npm-service:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.188:81"  
+        healthCheck:
+          path: "/"
+          interval: "30s"
+          timeout: "3s"
+    proxmox-service:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.0.102:8006"
+        serversTransport: "insecure-transport"
+        passHostHeader: true
+        healthCheck:
+          path: "/"
+          interval: "30s"
+          timeout: "3s"
+
+  serversTransports:
+    insecure-transport:
+      insecureSkipVerify: true

@@ -1,0 +1,26 @@
+services:
+  jenkins-blueocean:
+    image: myjenkins-blueocean:2.516.2-1
+    user: root
+    container_name: jenkins-blueocean
+    restart: unless-stopped
+    networks:
+       - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jenkins.rule=Host(`jenkins.gkibria121.com`)"
+      - "traefik.http.routers.jenkins.entrypoints=web"
+      - "traefik.http.services.jenkins.loadbalancer.server.port=8080"
+    environment:
+          DOCKER_HOST: unix:///var/run/docker.sock
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - /home/gkibria:/home/gkibria
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  jenkins-data:
+
+networks:
+  traefik-network:
+    external: true
