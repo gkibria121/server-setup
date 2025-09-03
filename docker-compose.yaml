@@ -26,7 +26,7 @@ services:
   jenkins-blueocean:
     build:
       context: ./jenkins
-    user: gkibria
+    user: root
     container_name: jenkins-blueocean
     restart: unless-stopped
     networks:
