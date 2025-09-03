@@ -40,7 +40,7 @@ services:
       DOCKER_HOST: unix:///var/run/docker.sock
     volumes:
       - jenkins-data:/var/jenkins_home
-      - /home/gkibria:/var/projects
+      - /home/gkibria:/home/gkibria
       - /var/run/docker.sock:/var/run/docker.sock
       - /home/gkibria/.gitconfig:/root/.gitconfig:ro
 volumes:
