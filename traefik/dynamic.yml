@@ -83,7 +83,10 @@ http:
         customResponseHeaders:
           Connection: "upgrade"
           Upgrade: "websocket"
-
+    basic-auth:
+      basicAuth:
+        users:
+          - "dnp:$$2y$$05$$VzqYcoQSqALcekXrRtcw9ubWwsQSGonE9sB1tVA.uY1H9dl4fzBj6"
   services:
     coolify-service:
       loadBalancer:
