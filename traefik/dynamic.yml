@@ -15,6 +15,13 @@ http:
         - web   
       middlewares:
         - default-headers
+    xui-router:
+      rule: "Host(`xui.gkibria121.com`)"
+      service: xui-service
+      entryPoints:
+        - web   
+      middlewares:
+        - default-headers
     console-router:
       rule: "Host(`console.gkibria121.com`)"
       service: console-service
@@ -134,7 +141,16 @@ http:
           path: "/"
           interval: "30s"
           timeout: "3s"
-
+    xui-service:
+      loadBalancer:
+        servers:
+          - url: "https://160.202.144.182:54321"
+        serversTransport: "insecure-transport"
+        passHostHeader: true
+        healthCheck:
+          path: "/"
+          interval: "30s"
+          timeout: "3s"
   serversTransports:
     insecure-transport:
       insecureSkipVerify: true
