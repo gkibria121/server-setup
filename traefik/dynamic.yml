@@ -15,9 +15,9 @@ http:
         - web   
       middlewares:
         - default-headers
-    xui-router:
-      rule: "Host(`xui.gkibria121.com`)"
-      service: xui-service
+    pfsense-router:
+      rule: "Host(`pfsense.gkibria121.com`)"
+      service: pfsense-service
       entryPoints:
         - web   
       middlewares:
@@ -141,10 +141,10 @@ http:
           path: "/"
           interval: "30s"
           timeout: "3s"
-    xui-service:
+    pfsense-service:
       loadBalancer:
         servers:
-          - url: "http://192.168.0.188:54321"
+          - url: "https://192.168.0.113:8443"
         serversTransport: "insecure-transport"
         passHostHeader: true
         healthCheck:
