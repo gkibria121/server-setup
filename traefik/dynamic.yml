@@ -144,7 +144,7 @@ http:
     xui-service:
       loadBalancer:
         servers:
-          - url: "https://160.202.144.182:54321"
+          - url: "http://192.168.0.188:54321"
         serversTransport: "insecure-transport"
         passHostHeader: true
         healthCheck:
