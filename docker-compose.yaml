@@ -61,7 +61,7 @@ services:
 
 volumes:
   jenkins-data:
-
+  pgadmin-data:
 networks:
   traefik-network:
     external: true
