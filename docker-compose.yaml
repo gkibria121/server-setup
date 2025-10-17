@@ -69,7 +69,7 @@ services:
     volumes:
       - postgres-data-production:/var/lib/postgresql/data
     networks:
-      - app-network
+      - traefik-network
     healthcheck:
       test:
         [
@@ -82,6 +82,7 @@ services:
 volumes:
   jenkins-data:
   pgadmin-data:
+  postgres-data-production:
 networks:
   traefik-network:
     external: true
