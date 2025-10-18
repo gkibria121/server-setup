@@ -64,8 +64,8 @@ services:
       - "5432:5432"
     environment:
       - POSTGRES_DB=${POSTGRES_DATABASE:-app}
-      - POSTGRES_USER=${POSTGRES_USERNAME:-laravel}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-secret}
+      - POSTGRES_USER=${POSTGRES_USERNAME:-root}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-toor}
     volumes:
       - postgres-data-production:/var/lib/postgresql/data
     networks:
