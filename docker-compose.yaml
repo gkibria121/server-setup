@@ -38,6 +38,8 @@ services:
       - "traefik.http.services.jenkins.loadbalancer.server.port=8080"
     environment:
       DOCKER_HOST: unix:///var/run/docker.sock
+      TZ: Asia/Dhaka
+
     volumes:
       - jenkins-data:/var/jenkins_home
       - /home/gkibria:/var/projects
