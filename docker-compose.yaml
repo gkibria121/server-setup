@@ -65,9 +65,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=${POSTGRES_DATABASE:-app}
-      - POSTGRES_USER=${POSTGRES_USERNAME:-root}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-toor}
+      - POSTGRES_DB=app
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=toor
     volumes:
       - postgres-data-production:/var/lib/postgresql/data
     networks:
