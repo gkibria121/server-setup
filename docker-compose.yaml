@@ -70,6 +70,8 @@ services:
       - /filebrowser/config:/config
       - /filebrowser/database/filebrowser.db:/database.db
     restart: unless-stopped
+    networks:
+      - traefik-network
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.filebrowser.rule=Host(`filebrowser.gkibria121.com`)"
