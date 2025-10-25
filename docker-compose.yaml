@@ -116,15 +116,13 @@ services:
       - DEFAULT_WORKSPACE=/config/workspace
       - PWA_APPNAME=code-server
     volumes:
-      - /path/to/code-server/config:/config
-    ports:
-      - 8443:8443
+      - /code-server/config:/config
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.vscode-server.rule=Host(`vscode.gkibria121.com`)"
       - "traefik.http.routers.vscode-server.entrypoints=web"
-      - "traefik.http.services.vscode-server.loadbalancer.server.port=8080"
+      - "traefik.http.services.vscode-server.loadbalancer.server.port=8443"
     networks:
       - traefik-network
 volumes:
