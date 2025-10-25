@@ -74,6 +74,8 @@ services:
       - "traefik.http.routers.vscode-server.rule=Host(`vscode.gkibria121.com`)"
       - "traefik.http.routers.vscode-server.entrypoints=web"
       - "traefik.http.services.vscode-server.loadbalancer.server.port=8080"
+    networks:
+      - traefik-network
   filebrowser:
     image: filebrowser/filebrowser:s6
     container_name: filebrowser
@@ -91,6 +93,8 @@ services:
       - "traefik.http.routers.filebrowser.rule=Host(`filebrowser.gkibria121.com`)"
       - "traefik.http.routers.filebrowser.entrypoints=web"
       - "traefik.http.services.filebrowser.loadbalancer.server.port=80"
+    networks:
+      - traefik-network
   postgres:
     image: postgres:16
     restart: unless-stopped
