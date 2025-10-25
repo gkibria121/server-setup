@@ -59,23 +59,6 @@ services:
       - "traefik.http.routers.pgadmin.entrypoints=web"
       - "traefik.http.services.pgadmin.loadbalancer.server.port=80"
 
-  vscode-server:
-    image: mcr.microsoft.com/vscode/devcontainers/base:ubuntu
-    container_name: vscode-server
-    restart: unless-stopped
-    volumes:
-      - ./workspace:/workspace
-    command: /bin/bash -c "
-      apt-get update && apt-get install -y curl &&
-      curl -fsSL https://code-server.dev/install.sh | sh &&
-      code-server --bind-addr 0.0.0.0:8080 --auth none /workspace"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.vscode-server.rule=Host(`vscode.gkibria121.com`)"
-      - "traefik.http.routers.vscode-server.entrypoints=web"
-      - "traefik.http.services.vscode-server.loadbalancer.server.port=8080"
-    networks:
-      - traefik-network
   filebrowser:
     image: filebrowser/filebrowser:s6
     container_name: filebrowser
@@ -118,6 +101,32 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+  vscode-server:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: code-server
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Dhaka
+      - PASSWORD=gkibria
+      - HASHED_PASSWORD= $2y$10$//qcL1Lc5wwtArI.rXoRY.o5di7CXKS0DTWbAL/B44R7QJ5P0dj0a
+      - SUDO_PASSWORD=password gkibria
+      - SUDO_PASSWORD_HASH=$2y$10$//qcL1Lc5wwtArI.rXoRY.o5di7CXKS0DTWbAL/B44R7QJ5P0dj0a
+      - PROXY_DOMAIN=vscode.gkibria121.com
+      - DEFAULT_WORKSPACE=/config/workspace
+      - PWA_APPNAME=code-server
+    volumes:
+      - /path/to/code-server/config:/config
+    ports:
+      - 8443:8443
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.vscode-server.rule=Host(`vscode.gkibria121.com`)"
+      - "traefik.http.routers.vscode-server.entrypoints=web"
+      - "traefik.http.services.vscode-server.loadbalancer.server.port=8080"
+    networks:
+      - traefik-network
 volumes:
   jenkins-data:
   pgadmin-data:
