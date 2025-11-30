@@ -7,14 +7,7 @@ http:
       entryPoints:
         - web
       middlewares:
-        - dashboard-auth
-    coolify-router:
-      rule: "Host(`coolify.gkibria121.com`)"
-      service: coolify-service
-      entryPoints:
-        - web   
-      middlewares:
-        - default-headers
+        - dashboard-auth 
     pfsense-router:
       rule: "Host(`pfsense.gkibria121.com`)"
       service: pfsense-service
@@ -94,15 +87,7 @@ http:
       basicAuth:
         users:
           - "dnp:$$2y$$05$$VzqYcoQSqALcekXrRtcw9ubWwsQSGonE9sB1tVA.uY1H9dl4fzBj6"
-  services:
-    coolify-service:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.0.100:8000"
-        healthCheck:
-          path: "/"
-          interval: "30s"
-          timeout: "3s"
+  services: 
     console-service:
       loadBalancer:
         servers:
