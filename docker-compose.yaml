@@ -125,7 +125,13 @@ services:
       - "traefik.http.services.vscode-server.loadbalancer.server.port=8443"
     networks:
       - traefik-network
-
+  uptime-kuma:
+    image: louislam/uptime-kuma:2
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+    ports: 
+      - "3001:3001"
 volumes:
   jenkins-data:
   pgadmin-data:
