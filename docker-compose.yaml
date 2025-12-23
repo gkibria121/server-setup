@@ -1,7 +1,7 @@
 # docker-compose.yml
 services:
   traefik:
-    image: traefik:v3.5
+    image: traefik:latest
     container_name: traefik
     command:
       - --api.dashboard=true
