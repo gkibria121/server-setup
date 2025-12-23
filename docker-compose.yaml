@@ -100,38 +100,19 @@ services:
         ]
       interval: 5s
       timeout: 5s
-      retries: 5
-  vscode-server:
-    image: lscr.io/linuxserver/code-server:latest
-    container_name: code-server
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Asia/Dhaka
-      - PASSWORD=gkibria
-      - HASHED_PASSWORD=
-      - SUDO_PASSWORD=gkibria
-      - SUDO_PASSWORD_HASH=
-      - PROXY_DOMAIN=vscode.gkibria121.com
-      - DEFAULT_WORKSPACE=/config/workspace
-      - PWA_APPNAME=code-server
-    volumes:
-      - /code-server/config:/config
-    restart: unless-stopped
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.vscode-server.rule=Host(`vscode.gkibria121.com`)"
-      - "traefik.http.routers.vscode-server.entrypoints=web"
-      - "traefik.http.services.vscode-server.loadbalancer.server.port=8443"
-    networks:
-      - traefik-network
+      retries: 5 
   uptime-kuma:
     image: louislam/uptime-kuma:2
     restart: unless-stopped
     volumes:
-      - ./data:/app/data
-    ports: 
-      - "3001:3001"
+      - ./data:/app/data 
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.uptime-kuma.rule=Host(`uptime.gkibria121.com`)"
+      - "traefik.http.routers.uptime-kuma.entrypoints=web"
+      - "traefik.http.services.uptime-kuma.loadbalancer.server.port=3001"
+    networks:
+      - traefik-network
 volumes:
   jenkins-data:
   pgadmin-data:
