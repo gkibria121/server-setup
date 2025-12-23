@@ -33,6 +33,13 @@ http:
       middlewares:
         - console-headers
         - websocket-headers 
+    homarr-router:
+      rule: "Host(`homarr.gkibria121.com`)"
+      service: homarr-service
+      entryPoints:
+        - web
+      middlewares:
+        - default-headers
  
 
   middlewares:
@@ -106,6 +113,15 @@ http:
           path: "/"
           interval: "30s"
           timeout: "3s" 
+    homarr-service:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.188:7575"
+        passHostHeader: true
+        healthCheck:
+          path: "/"
+          interval: "30s"
+          timeout: "3s"
   serversTransports:
     insecure-transport:
       insecureSkipVerify: true
