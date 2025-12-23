@@ -7,13 +7,7 @@ http:
       entryPoints:
         - web
       middlewares:
-        - dashboard-auth 
-    pfsense-router:
-      rule: "Host(`pfsense.gkibria121.com`)"
-      service: pfsense-service
-      entryPoints:
-        - web   
-      middlewares:
+        - dashboard-auth  
         - default-headers
     console-router:
       rule: "Host(`console.gkibria121.com`)"
@@ -24,7 +18,7 @@ http:
         - console-headers
         - websocket-headers
     docker-router:
-      rule: "Host(`docker.gkibria121.com`)"
+      rule: "Host(`portainer.gkibria121.com`)"
       service: docker-service
       entryPoints:
         - web    
@@ -39,14 +33,7 @@ http:
       middlewares:
         - console-headers
         - websocket-headers 
-
-    npm-router:
-      rule: "Host(`npm.gkibria121.com`)"
-      service: npm-service
-      entryPoints:
-        - web   
-      middlewares:
-        - default-headers
+ 
 
   middlewares:
     dashboard-auth:
@@ -85,6 +72,7 @@ http:
           Upgrade: "websocket"
     basic-auth:
       basicAuth:
+       # Username: dnp, Password: pe551
         users:
           - "dnp:$$2y$$05$$VzqYcoQSqALcekXrRtcw9ubWwsQSGonE9sB1tVA.uY1H9dl4fzBj6"
   services: 
@@ -107,15 +95,7 @@ http:
         healthCheck:
           path: "/"
           interval: "30s"
-          timeout: "3s"
-    npm-service:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.0.188:81"  
-        healthCheck:
-          path: "/"
-          interval: "30s"
-          timeout: "3s"
+          timeout: "3s" 
     proxmox-service:
       loadBalancer:
         servers:
@@ -125,17 +105,7 @@ http:
         healthCheck:
           path: "/"
           interval: "30s"
-          timeout: "3s"
-    pfsense-service:
-      loadBalancer:
-        servers:
-          - url: "https://192.168.0.113:8443"
-        serversTransport: "insecure-transport"
-        passHostHeader: true
-        healthCheck:
-          path: "/"
-          interval: "30s"
-          timeout: "3s"
+          timeout: "3s" 
   serversTransports:
     insecure-transport:
       insecureSkipVerify: true
