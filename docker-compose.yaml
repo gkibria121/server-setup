@@ -67,9 +67,12 @@ services:
       - PGID=1000
       - TZ=Asia/Dhaka
     volumes:
-      - /mnt/stroage:/srv
-      - /filebrowser/config:/config
-      - /filebrowser/database/filebrowser.db:/database.db
+      - /mnt/storage/filebrowser/data/files:/srv
+      - /mnt/storage/filebrowser.db:/database.db
+      - /mnt/storage/filebrowser/filebrowser-config.json:/config.json
+
+
+
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
