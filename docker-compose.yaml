@@ -60,7 +60,7 @@ services:
       - "traefik.http.services.pgadmin.loadbalancer.server.port=80"
 
   filebrowser:
-    image: filebrowser/filebrowser:s6
+    image: filebrowser/filebrowser:latest
     container_name: filebrowser
     environment:
       - PUID=1000
