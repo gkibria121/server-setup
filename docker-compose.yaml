@@ -67,7 +67,7 @@ services:
       - PGID=1000
       - TZ=Asia/Dhaka
     volumes:
-      - /filebrowser:/srv
+      - /mnt/stroage:/srv
       - /filebrowser/config:/config
       - /filebrowser/database/filebrowser.db:/database.db
     restart: unless-stopped
