@@ -129,7 +129,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.superproductivity.rule=Host(`productivity.gkibria121.com`)"
       - "traefik.http.routers.superproductivity.etrypoints=web"
-      - "traefik.http.services.superproductivity.jloadbalancer.server.port=80"
+      - "traefik.http.services.superproductivity.loadbalancer.server.port=80"
     networks:
       - traefik-network
 volumes:
