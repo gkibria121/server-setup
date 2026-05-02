@@ -23,27 +23,6 @@ services:
     networks:
       - traefik-network
     restart: unless-stopped
-  jenkins-blueocean:
-    build:
-      context: ./jenkins
-    user: root
-    container_name: jenkins-blueocean
-    restart: unless-stopped
-    networks:
-      - traefik-network
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.jenkins.rule=Host(`jenkins.gkibria121.com`)"
-      - "traefik.http.routers.jenkins.entrypoints=web"
-      - "traefik.http.services.jenkins.loadbalancer.server.port=8080"
-    environment:
-      DOCKER_HOST: unix:///var/run/docker.sock
-      TZ: Asia/Dhaka
-
-    volumes:
-      - jenkins-data:/var/jenkins_home
-      - /home/gkibria:/var/projects
-      - /var/run/docker.sock:/var/run/docker.sock
   pgadmin:
     image: dpage/pgadmin4:latest
     environment:
@@ -62,7 +41,7 @@ services:
   filebrowser:
     image: filebrowser/filebrowser:latest
     container_name: filebrowser
-   
+
     environment:
       - PUID=1000
       - PGID=1000
@@ -71,8 +50,6 @@ services:
       - /mnt/storage/filebrowser/data/files:/srv
       - /mnt/storage/filebrowser.db:/database.db
       - /mnt/storage/filebrowser/filebrowser-config.json:/config.json
-
-
 
     restart: unless-stopped
     labels:
@@ -104,12 +81,12 @@ services:
         ]
       interval: 5s
       timeout: 5s
-      retries: 5 
+      retries: 5
   uptime-kuma:
     image: louislam/uptime-kuma:2
     restart: unless-stopped
     volumes:
-      - ./data:/app/data 
+      - ./data:/app/data
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.uptime-kuma.rule=Host(`uptime.gkibria121.com`)"
@@ -133,7 +110,6 @@ services:
     networks:
       - traefik-network
 volumes:
-  jenkins-data:
   pgadmin-data:
   postgres-data-production:
   sp_data:
