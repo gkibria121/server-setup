@@ -40,6 +40,14 @@ http:
         - web
       middlewares:
         - default-headers
+    wildcard-router:
+      rule: "HostRegexp(`{subdomain:[a-zA-Z0-9-]+}.gkibria121.com`)"
+      entryPoints:
+        - web
+      service: external-web-service
+      priority: 1
+      middlewares:
+        - default-headers
  
 
   middlewares:
@@ -51,7 +59,7 @@ http:
     default-headers:
       headers:
         frameDeny: true
-        sslRedirect: false
+        sslRedirect: true
         browserXssFilter: true
         contentTypeNosniff: true
         forceSTSHeader: true
@@ -122,6 +130,11 @@ http:
           path: "/"
           interval: "30s"
           timeout: "3s"
+    external-web-service:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.103:80"
+        passHostHeader: true
   serversTransports:
     insecure-transport:
       insecureSkipVerify: true
