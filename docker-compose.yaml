@@ -11,9 +11,20 @@ services:
       - --providers.file.filename=/etc/traefik/dynamic.yml
       - --providers.file.watch=true
       - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443 # NEW: HTTPS entrypoint
+      - --entrypoints.websecure.http3 # NEW: enables HTTP/3 (QUIC) on 443
+      - --entrypoints.web.http.encodequerysemicolons=true # NEW: fixes semicolons in URLs
+      - --entrypoints.websecure.http.encodequerysemicolons=true # NEW: same for HTTPS
+      - --entryPoints.web.http2.maxConcurrentStreams=250 # NEW: HTTP/2 tuning
+      - --entryPoints.websecure.http2.maxConcurrentStreams=250 # NEW: same for HTTPS
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge=true # NEW
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web # NEW
+      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json # NEW
       - --log.level=DEBUG
     ports:
       - "80:80"
+      - "443:443" # NEW: expose HTTPS port
+      - "443:443/udp" # NEW: needed for HTTP/3 (QUIC runs over UDP)
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
