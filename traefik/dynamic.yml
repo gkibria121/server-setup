@@ -41,11 +41,11 @@ http:
       middlewares:
         - default-headers
     wildcard-router:
-      rule: "HostRegexp(`{subdomain:[a-zA-Z0-9-]+}.gkibria121.com`)"
+      rule: "HostRegexp(`[a-zA-Z0-9-]+\\.gkibria121\\.com`)"
       entryPoints:
         - web
-      service: external-web-service
-      priority: 1
+      service: api@internal
+      priority: 10
       middlewares:
         - default-headers
  

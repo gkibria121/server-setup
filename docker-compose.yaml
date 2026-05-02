@@ -12,7 +12,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
-      - ./letsencrypt:/letsencrypt
+      - traefik-certs:/letsencrypt
     networks:
       - traefik-network
     restart: unless-stopped
@@ -106,6 +106,7 @@ volumes:
   pgadmin-data:
   postgres-data-production:
   sp_data:
+  traefik-certs:
 networks:
   traefik-network:
     external: true
