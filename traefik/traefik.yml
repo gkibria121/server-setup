@@ -7,8 +7,6 @@ log:
 entryPoints:
   web:
     address: ":80"
-  websecure:
-    address: ":443"
   db:
     address: ":5432"  # TCP port
 providers:

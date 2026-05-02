@@ -11,16 +11,9 @@ services:
       - --providers.file.filename=/etc/traefik/dynamic.yml
       - --providers.file.watch=true
       - --entrypoints.web.address=:80
-      - --entrypoints.websecure.address=:443
-      - --entrypoints.web.http.redirections.entryPoint.to=websecure
-      - --entrypoints.web.http.redirections.entryPoint.scheme=https
-      - --certificatesresolvers.myresolver.acme.tlschallenge=true
-      - --certificatesresolvers.myresolver.acme.email=admin@gkibria121.com
-      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
       - --log.level=DEBUG
     ports:
       - "80:80"
-      - "443:443"
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -41,8 +34,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.pgadmin.rule=Host(`pg-admin.gkibria121.com`)"
-      - "traefik.http.routers.pgadmin.entrypoints=websecure"
-      - "traefik.http.routers.pgadmin.tls.certresolver=myresolver"
+      - "traefik.http.routers.pgadmin.entrypoints=web"
       - "traefik.http.services.pgadmin.loadbalancer.server.port=80"
 
   filebrowser:
@@ -62,8 +54,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.filebrowser.rule=Host(`filebrowser.gkibria121.com`)"
-      - "traefik.http.routers.filebrowser.entrypoints=websecure"
-      - "traefik.http.routers.filebrowser.tls.certresolver=myresolver"
+      - "traefik.http.routers.filebrowser.entrypoints=web"
       - "traefik.http.services.filebrowser.loadbalancer.server.port=80"
     networks:
       - traefik-network
@@ -98,8 +89,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.uptime-kuma.rule=Host(`uptime.gkibria121.com`)"
-      - "traefik.http.routers.uptime-kuma.entrypoints=websecure"
-      - "traefik.http.routers.uptime-kuma.tls.certresolver=myresolver"
+      - "traefik.http.routers.uptime-kuma.entrypoints=web"
       - "traefik.http.services.uptime-kuma.loadbalancer.server.port=3001"
     networks:
       - traefik-network
@@ -114,8 +104,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.superproductivity.rule=Host(`productivity.gkibria121.com`)"
-      - "traefik.http.routers.superproductivity.entrypoints=websecure"
-      - "traefik.http.routers.superproductivity.tls.certresolver=myresolver"
+      - "traefik.http.routers.superproductivity.entrypoints=web"
       - "traefik.http.services.superproductivity.loadbalancer.server.port=80"
     networks:
       - traefik-network
