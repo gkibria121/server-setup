@@ -3,31 +3,14 @@ services:
   traefik:
     image: traefik:latest
     container_name: traefik
-    command:
-      - --api.dashboard=true
-      - --api.insecure=true
-      - --providers.docker=true
-      - --providers.docker.exposedbydefault=false
-      - --providers.file.filename=/etc/traefik/dynamic.yml
-      - --providers.file.watch=true
-      - --entrypoints.web.address=:80
-      - --entrypoints.websecure.address=:443 # NEW: HTTPS entrypoint
-      - --entrypoints.websecure.http3 # NEW: enables HTTP/3 (QUIC) on 443
-      - --entrypoints.web.http.encodequerysemicolons=true # NEW: fixes semicolons in URLs
-      - --entrypoints.websecure.http.encodequerysemicolons=true # NEW: same for HTTPS
-      - --entryPoints.web.http2.maxConcurrentStreams=250 # NEW: HTTP/2 tuning
-      - --entryPoints.websecure.http2.maxConcurrentStreams=250 # NEW: same for HTTPS
-      - --certificatesresolvers.letsencrypt.acme.httpchallenge=true # NEW
-      - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web # NEW
-      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json # NEW
-      - --log.level=DEBUG
     ports:
       - "80:80"
-      - "443:443" # NEW: expose HTTPS port
-      - "443:443/udp" # NEW: needed for HTTP/3 (QUIC runs over UDP)
+      - "443:443"
+      - "443:443/udp"
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
       - ./letsencrypt:/letsencrypt
     networks:
@@ -45,7 +28,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.pgadmin.rule=Host(`pg-admin.gkibria121.com`)"
-      - "traefik.http.routers.pgadmin.entrypoints=web"
+      - "traefik.http.routers.pgadmin.entrypoints=websecure"
       - "traefik.http.services.pgadmin.loadbalancer.server.port=80"
 
   filebrowser:
@@ -65,7 +48,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.filebrowser.rule=Host(`filebrowser.gkibria121.com`)"
-      - "traefik.http.routers.filebrowser.entrypoints=web"
+      - "traefik.http.routers.filebrowser.entrypoints=websecure"
       - "traefik.http.services.filebrowser.loadbalancer.server.port=80"
     networks:
       - traefik-network
@@ -100,7 +83,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.uptime-kuma.rule=Host(`uptime.gkibria121.com`)"
-      - "traefik.http.routers.uptime-kuma.entrypoints=web"
+      - "traefik.http.routers.uptime-kuma.entrypoints=websecure"
       - "traefik.http.services.uptime-kuma.loadbalancer.server.port=3001"
     networks:
       - traefik-network
@@ -115,7 +98,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.superproductivity.rule=Host(`productivity.gkibria121.com`)"
-      - "traefik.http.routers.superproductivity.entrypoints=web"
+      - "traefik.http.routers.superproductivity.entrypoints=websecure"
       - "traefik.http.services.superproductivity.loadbalancer.server.port=80"
     networks:
       - traefik-network
