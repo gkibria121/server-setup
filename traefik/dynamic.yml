@@ -5,7 +5,7 @@ http:
       rule: "Host(`traefik.gkibria121.com`)"
       service: api@internal
       entryPoints:
-        - websecure
+        - web
       middlewares:
         - dashboard-auth  
         - default-headers
@@ -13,7 +13,7 @@ http:
       rule: "Host(`console.gkibria121.com`)"
       service: console-service
       entryPoints:
-        - websecure
+        - web
       middlewares:
         - console-headers
         - websocket-headers
@@ -21,7 +21,7 @@ http:
       rule: "Host(`portainer.gkibria121.com`)"
       service: docker-service
       entryPoints:
-        - websecure
+        - web
       middlewares:
         - console-headers
         - websocket-headers   
@@ -29,7 +29,7 @@ http:
       rule: "Host(`proxmox.gkibria121.com`)"
       service: proxmox-service
       entryPoints:
-        - websecure
+        - web
       middlewares:
         - console-headers
         - websocket-headers 
@@ -37,7 +37,7 @@ http:
       rule: "Host(`homarr.gkibria121.com`)"
       service: homarr-service
       entryPoints:
-        - websecure
+        - web
       middlewares:
         - default-headers
  
