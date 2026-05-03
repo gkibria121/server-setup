@@ -6,13 +6,14 @@ log:
   level: INFO
 
 entryPoints:
-  web-http:
+  http:
     address: ":80"
     http:
       redirections:
         entryPoint:
           to: web
           scheme: https
+
   web:
     address: ":443"
     http:
@@ -34,4 +35,4 @@ certificatesResolvers:
       email: admin@gkibria121.com
       storage: /letsencrypt/acme.json
       httpChallenge:
-        entryPoint: web-http
+        entryPoint: http

@@ -6,6 +6,7 @@ http:
       service: api@internal
       entryPoints:
         - web
+      tls: {}
       middlewares:
         - dashboard-auth  
         - default-headers
@@ -14,6 +15,7 @@ http:
       service: console-service
       entryPoints:
         - web
+      tls: {}
       middlewares:
         - console-headers
         - websocket-headers
@@ -22,6 +24,7 @@ http:
       service: docker-service
       entryPoints:
         - web
+      tls: {}
       middlewares:
         - console-headers
         - websocket-headers   
@@ -30,6 +33,7 @@ http:
       service: proxmox-service
       entryPoints:
         - web
+      tls: {}
       middlewares:
         - console-headers
         - websocket-headers 
@@ -38,14 +42,16 @@ http:
       service: homarr-service
       entryPoints:
         - web
+      tls: {}
       middlewares:
         - default-headers
-    wildcard-router:
-      rule: "HostRegexp(`[a-zA-Z0-9-]+\\.gkibria121\\.com`)"
+    catchall-router:
+      rule: "Host(`gkibria121.com`) || HostRegexp(`{subdomain:[a-z0-9-]+}.gkibria121.com`)"
       entryPoints:
         - web
+      tls: {}
       service: api@internal
-      priority: 10
+      priority: 1
       middlewares:
         - default-headers
  
@@ -59,7 +65,7 @@ http:
     default-headers:
       headers:
         frameDeny: true
-        sslRedirect: true
+        # sslRedirect: true  # Redundant with global entrypoint redirect
         browserXssFilter: true
         contentTypeNosniff: true
         forceSTSHeader: true
@@ -130,11 +136,6 @@ http:
           path: "/"
           interval: "30s"
           timeout: "3s"
-    external-web-service:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.0.103:80"
-        passHostHeader: true
   serversTransports:
     insecure-transport:
       insecureSkipVerify: true
