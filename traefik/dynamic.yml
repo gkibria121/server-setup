@@ -49,8 +49,7 @@ http:
       rule: "Host(`destrotex.com`) || HostRegexp(`{subdomain:[a-z0-9-]+}.destrotex.com`)"
       service: destrotex-service
       entryPoints:
-        - web
-      tls: {}
+        - web 
       middlewares:
         - default-headers
     catchall-router:
