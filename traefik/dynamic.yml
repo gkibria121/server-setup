@@ -45,6 +45,14 @@ http:
       tls: {}
       middlewares:
         - default-headers
+    destrotex-router:
+      rule: "Host(`destrotex.com`) || HostRegexp(`{subdomain:[a-z0-9-]+}.destrotex.com`)"
+      service: destrotex-service
+      entryPoints:
+        - web
+      tls: {}
+      middlewares:
+        - default-headers
     catchall-router:
       rule: "Host(`gkibria121.com`) || HostRegexp(`{subdomain:[a-z0-9-]+}.gkibria121.com`)"
       entryPoints:
@@ -131,6 +139,15 @@ http:
       loadBalancer:
         servers:
           - url: "http://192.168.0.188:7575"
+        passHostHeader: true
+        healthCheck:
+          path: "/"
+          interval: "30s"
+          timeout: "3s"
+    destrotex-service:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.108"
         passHostHeader: true
         healthCheck:
           path: "/"
