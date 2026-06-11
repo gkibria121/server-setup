@@ -41,6 +41,7 @@ services:
       - TZ=Asia/Dhaka
     volumes:
       - /mnt/storage/filebrowser/data/files:/srv
+      - "/mnt/backup:/srv/PC Backup"
       - /mnt/storage/filebrowser.db:/database.db
       - /mnt/storage/filebrowser/filebrowser-config.json:/config.json
 
