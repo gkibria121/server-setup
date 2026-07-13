@@ -76,34 +76,23 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-  uptime-kuma:
-    image: louislam/uptime-kuma:2
-    restart: unless-stopped
+
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    ports:
+      - 13378:80
     volumes:
-      - ./data:/app/data
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.uptime-kuma.rule=Host(`uptime.gkibria121.com`)"
-      - "traefik.http.routers.uptime-kuma.entrypoints=web"
-      - "traefik.http.services.uptime-kuma.loadbalancer.server.port=3001"
-    networks:
-      - traefik-network
-  superproductivity:
-    image: johannesjo/super-productivity:latest
-    container_name: superproductivity
-    restart: unless-stopped
-    volumes:
-      - sp_data:/usr/share/nginx/html/assets
+      - ~/.audiobooks/config:/config
+      - ~/.audiobooks/metadata:/metadata
+      - /mnt/backup/courses/Audiobooks:/audiobooks
+      - /mnt/backup/courses/podcasts:/podcasts
     environment:
-      - TZ=Asia/Dhaka
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.superproductivity.rule=Host(`productivity.gkibria121.com`)"
-      - "traefik.http.routers.superproductivity.entrypoints=web"
-      - "traefik.http.services.superproductivity.loadbalancer.server.port=80"
-    networks:
-      - traefik-network
+      - TZ=America/Toronto
+    restart: unless-stopped
+
+
 volumes:
+  
   pgadmin-data:
   postgres-data-production:
   sp_data:
