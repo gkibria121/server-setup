@@ -98,7 +98,8 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Asia/Dhaka
-      - PASSWORD= # optional, set a password for web UI access
+      - CUSTOM_USER=gkibria
+      - PASSWORD=gkibria121 # optional, set a password for web UI access
     volumes:
       -  ~/.calibre/config:/config
       - /mnt/backup/courses/Audiobooks:/books
