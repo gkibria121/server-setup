@@ -105,7 +105,7 @@ services:
       - /mnt/backup/courses/Audiobooks:/books
     ports:
       - "13379:8080"   # web UI (noVNC / KasmVNC desktop)
-      - "8881:8081"    # content server (optional, for OPDS/direct book access)
+      - "8081:8081"    # content server (optional, for OPDS/direct book access)
     restart: unless-stopped
 
 volumes:
