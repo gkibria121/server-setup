@@ -153,6 +153,10 @@ services:
       ALLOWED_ORIGINS: "https://koodo.gkibria121.com,https://koodo-data.gkibria121.com" 
     volumes:
       - /mnt/backup/courses/Audiobooks:/app/uploads
+    ports:
+      - "80:80"        # web UI (only needed if not routing through Traefik)
+      - "8080:8080"    # data source / OPDS
+      - "7200:7200"    # KOReader sync server
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.koodo.rule=Host(`koodo.gkibria121.com`)"
