@@ -117,25 +117,28 @@ services:
       - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.gkibria121.com`)"
       - "traefik.http.routers.qbittorrent.entrypoints=web"
       - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
-  # calibre:
-  #   image: lscr.io/linuxserver/calibre:latest
-  #   container_name: calibre
-  #   security_opt:
-  #     - seccomp:unconfined # for Chrome/GPU rendering in some browsers
-  #   environment:
-  #     - PUID=1000
-  #     - PGID=1000
-  #     - TZ=Asia/Dhaka
-  #     - CUSTOM_USER=gkibria
-  #     - PASSWORD=gkibria121 # optional, set a password for web UI access
-  #   volumes:
-  #     -  ~/.calibre/config:/config
-  #     - /mnt/backup/courses/Audiobooks:/books
-  #   ports:
-  #     - "13379:8080"   # web UI (noVNC / KasmVNC desktop)
-  #     - "8081:8081"    # content server (optional, for OPDS/direct book access)
-  #   restart: unless-stopped
-
+  calibre:
+    image: lscr.io/linuxserver/calibre:latest
+    container_name: calibre
+    security_opt:
+      - seccomp:unconfined # for Chrome/GPU rendering in some browsers
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Dhaka
+      - CUSTOM_USER=gkibria
+      - PASSWORD=gkibria121 # optional, set a password for web UI access
+    volumes:
+      -  ~/.config:/config
+      - /mnt/backup/courses/Audiobooks:/books 
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.calibre.rule=Host(`calibre.gkibria121.com`)"
+      - "traefik.http.routers.calibre.entrypoints=web"
+      - "traefik.http.services.calibre.loadbalancer.server.port=8080"
+    restart: unless-stopped
+    networks:
+      - traefik-network
 volumes:
   
   pgadmin-data:
