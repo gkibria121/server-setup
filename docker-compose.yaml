@@ -163,7 +163,7 @@ services:
       - "traefik.http.routers.koodo-data.entrypoints=web" 
       - "traefik.http.services.koodo-data.loadbalancer.server.port=8080"
     networks:
-      - traefik-public
+      - traefik-network
 
 
 volumes:
