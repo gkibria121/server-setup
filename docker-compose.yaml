@@ -103,13 +103,13 @@ services:
       - PGID=1000
       - TZ=Asia/Dhaka
       - WEBUI_PORT=8080
-      - TORRENTING_PORT=6881
+      - TORRENTING_PORT=21439
     volumes:
       - ~/.config:/config
       - /mnt/backup/courses/Audiobooks:/downloads   # change to your actual downloads path
     ports:
-      - "6881:6881"        # torrent traffic - TCP
-      - "6881:6881/udp"    # torrent traffic - UDP
+      - "21439:21439"        # torrent traffic - TCP
+      - "21439:21439/udp"    # torrent traffic - UDP
     networks:
       - traefik-network
     labels:
