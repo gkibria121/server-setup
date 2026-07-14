@@ -78,9 +78,7 @@ services:
       retries: 5
 
   audiobookshelf:
-    image: ghcr.io/advplyr/audiobookshelf:latest
-    ports:
-      - 13378:80
+    image: ghcr.io/advplyr/audiobookshelf:latest 
     volumes:
       - ~/.audiobooks/config:/config
       - ~/.audiobooks/metadata:/metadata
@@ -89,24 +87,54 @@ services:
     environment:
       - TZ=America/Toronto
     restart: unless-stopped 
-  calibre:
-    image: lscr.io/linuxserver/calibre:latest
-    container_name: calibre
-    security_opt:
-      - seccomp:unconfined # for Chrome/GPU rendering in some browsers
+    networks:
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.audiobookshelf.rule=Host(`audiobookshelf.gkibria121.com`)"
+      - "traefik.http.routers.audiobookshelf.entrypoints=web"
+      - "traefik.http.services.audiobookshelf.loadbalancer.server.port=80"
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Asia/Dhaka
-      - CUSTOM_USER=gkibria
-      - PASSWORD=gkibria121 # optional, set a password for web UI access
+      - WEBUI_PORT=8080
+      - TORRENTING_PORT=6881
     volumes:
-      -  ~/.calibre/config:/config
-      - /mnt/backup/courses/Audiobooks:/books
+      - ./config:/config
+      - /path/to/downloads:/downloads   # change to your actual downloads path
     ports:
-      - "13379:8080"   # web UI (noVNC / KasmVNC desktop)
-      - "8081:8081"    # content server (optional, for OPDS/direct book access)
-    restart: unless-stopped
+      - "6881:6881"        # torrent traffic - TCP
+      - "6881:6881/udp"    # torrent traffic - UDP
+    networks:
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.gkibria121.com`)"
+      - "traefik.http.routers.qbittorrent.entrypoints=web"
+      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
+  # calibre:
+  #   image: lscr.io/linuxserver/calibre:latest
+  #   container_name: calibre
+  #   security_opt:
+  #     - seccomp:unconfined # for Chrome/GPU rendering in some browsers
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - TZ=Asia/Dhaka
+  #     - CUSTOM_USER=gkibria
+  #     - PASSWORD=gkibria121 # optional, set a password for web UI access
+  #   volumes:
+  #     -  ~/.calibre/config:/config
+  #     - /mnt/backup/courses/Audiobooks:/books
+  #   ports:
+  #     - "13379:8080"   # web UI (noVNC / KasmVNC desktop)
+  #     - "8081:8081"    # content server (optional, for OPDS/direct book access)
+  #   restart: unless-stopped
 
 volumes:
   
