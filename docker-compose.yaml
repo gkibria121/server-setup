@@ -139,6 +139,33 @@ services:
     restart: unless-stopped
     networks:
       - traefik-network
+  koodo-reader:
+    image: ghcr.io/koodo-reader/koodo-reader:master
+    container_name: koodo-reader
+    restart: unless-stopped
+    environment:
+      ENABLE_HTTP_SERVER: "true"          # enables data source feature
+      SERVER_USERNAME: "gkibria"            # change this
+      SERVER_PASSWORD: "gkibria121"      # change this
+      ENABLE_OPDS: "true"                  # set false if you don't need OPDS
+      ENABLE_KOREADER_SERVER: "true"       # set false if you don't need KOReader sync
+      ENABLE_KOREADER_REGISTRATION: "false"
+      ALLOWED_ORIGINS: "https://koodo.gkibria121.com,https://koodo-data.gkibria121.com" 
+    volumes:
+      - /mnt/backup/courses/Audiobooks:/app/uploads
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.koodo.rule=Host(`koodo.gkibria121.com`)"
+      - "traefik.http.routers.koodo.entrypoints=web" 
+      - "traefik.http.services.koodo.loadbalancer.server.port=80"
+      # If you want the data source (8080) exposed on its own subdomain too:
+      - "traefik.http.routers.koodo-data.rule=Host(`koodo-data.gkibria121.com`)"
+      - "traefik.http.routers.koodo-data.entrypoints=web" 
+      - "traefik.http.services.koodo-data.loadbalancer.server.port=8080"
+    networks:
+      - traefik-public
+
+
 volumes:
   
   pgadmin-data:
