@@ -105,8 +105,8 @@ services:
       - WEBUI_PORT=8080
       - TORRENTING_PORT=6881
     volumes:
-      - ./config:/config
-      - /path/to/downloads:/downloads   # change to your actual downloads path
+      -  ~/.qbittorrent/config:/config
+      - /mnt/backup/courses/Audiobooks:/downloads   # change to your actual downloads path
     ports:
       - "6881:6881"        # torrent traffic - TCP
       - "6881:6881/udp"    # torrent traffic - UDP
