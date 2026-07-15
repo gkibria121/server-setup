@@ -117,37 +117,37 @@ services:
       - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.gkibria121.com`)"
       - "traefik.http.routers.qbittorrent.entrypoints=web"
       - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080" 
-koodo-reader:
-    image: ghcr.io/koodo-reader/koodo-reader:master
-    container_name: koodo-reader
-    restart: unless-stopped
-    environment:
-      ENABLE_HTTP_SERVER: "true"
-      SERVER_USERNAME: "gkibria"
-      SERVER_PASSWORD: "gkibria121"
-      ENABLE_OPDS: "true"
-      ENABLE_KOREADER_SERVER: "true"
-      ENABLE_KOREADER_REGISTRATION: "false"
-      ALLOWED_ORIGINS: "http://koodo-reader.gkibria121.com,http://koodo-data.gkibria121.com"
-    volumes:
-      - /mnt/backup/courses/Audiobooks:/app/uploads
-    networks:
-      - traefik-network
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=traefik-network"
+  koodo-reader:
+        image: ghcr.io/koodo-reader/koodo-reader:master
+        container_name: koodo-reader
+        restart: unless-stopped
+        environment:
+          ENABLE_HTTP_SERVER: "true"
+          SERVER_USERNAME: "gkibria"
+          SERVER_PASSWORD: "gkibria121"
+          ENABLE_OPDS: "true"
+          ENABLE_KOREADER_SERVER: "true"
+          ENABLE_KOREADER_REGISTRATION: "false"
+          ALLOWED_ORIGINS: "http://koodo-reader.gkibria121.com,http://koodo-data.gkibria121.com"
+        volumes:
+          - /mnt/backup/courses/Audiobooks:/app/uploads
+        networks:
+          - traefik-network
+        labels:
+          - "traefik.enable=true"
+          - "traefik.docker.network=traefik-network"
 
-      # Web UI router -> explicitly bound to koodo-reader service
-      - "traefik.http.routers.koodo-reader.rule=Host(`koodo-reader.gkibria121.com`)"
-      - "traefik.http.routers.koodo-reader.entrypoints=web"
-      - "traefik.http.routers.koodo-reader.service=koodo-reader"
-      - "traefik.http.services.koodo-reader.loadbalancer.server.port=80"
+          # Web UI router -> explicitly bound to koodo-reader service
+          - "traefik.http.routers.koodo-reader.rule=Host(`koodo-reader.gkibria121.com`)"
+          - "traefik.http.routers.koodo-reader.entrypoints=web"
+          - "traefik.http.routers.koodo-reader.service=koodo-reader"
+          - "traefik.http.services.koodo-reader.loadbalancer.server.port=80"
 
-      # Data source router -> explicitly bound to koodo-data service
-      - "traefik.http.routers.koodo-data.rule=Host(`koodo-data.gkibria121.com`)"
-      - "traefik.http.routers.koodo-data.entrypoints=web"
-      - "traefik.http.routers.koodo-data.service=koodo-data"
-      - "traefik.http.services.koodo-data.loadbalancer.server.port=8080"
+          # Data source router -> explicitly bound to koodo-data service
+          - "traefik.http.routers.koodo-data.rule=Host(`koodo-data.gkibria121.com`)"
+          - "traefik.http.routers.koodo-data.entrypoints=web"
+          - "traefik.http.routers.koodo-data.service=koodo-data"
+          - "traefik.http.services.koodo-data.loadbalancer.server.port=8080"
 
 volumes:
   
