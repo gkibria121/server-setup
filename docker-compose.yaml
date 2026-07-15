@@ -128,7 +128,7 @@ services:
       ENABLE_OPDS: "true"                  # set false if you don't need OPDS
       ENABLE_KOREADER_SERVER: "true"       # set false if you don't need KOReader sync
       ENABLE_KOREADER_REGISTRATION: "false"
-      ALLOWED_ORIGINS: "https://koodo-reader.gkibria121.com" 
+      ALLOWED_ORIGINS: "http://koodo-reader.gkibria121.com" 
     volumes:
       - /mnt/backup/courses/Audiobooks:/app/uploads     # web UI (only needed if not routing through Traefik)  
     networks:
