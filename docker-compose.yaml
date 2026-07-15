@@ -128,7 +128,7 @@ services:
       ENABLE_OPDS: "true"                  # set false if you don't need OPDS
       ENABLE_KOREADER_SERVER: "true"       # set false if you don't need KOReader sync
       ENABLE_KOREADER_REGISTRATION: "false"
-      ALLOWED_ORIGINS: "http://koodo-reader.gkibria121.com" 
+      ALLOWED_ORIGINS: "http://koodo-reader.gkibria121.com,http://koodo-data.gkibria121.com" 
     volumes:
       - /mnt/backup/courses/Audiobooks:/app/uploads     # web UI (only needed if not routing through Traefik)  
     networks:
@@ -139,6 +139,9 @@ services:
       - "traefik.http.routers.koodo-reader.entrypoints=web"
       - "traefik.http.services.koodo-reader.loadbalancer.server.port=80" 
 
+      - "traefik.http.routers.koodo-data.rule=Host(`koodo-data.gkibria121.com`)"
+      - "traefik.http.routers.koodo-data.entrypoints=web"
+      - "traefik.http.services.koodo-data.loadbalancer.server.port=8080" 
 
 volumes:
   
