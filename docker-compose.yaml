@@ -116,29 +116,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.gkibria121.com`)"
       - "traefik.http.routers.qbittorrent.entrypoints=web"
-      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
-  calibre:
-    image: lscr.io/linuxserver/calibre:latest
-    container_name: calibre
-    security_opt:
-      - seccomp:unconfined # for Chrome/GPU rendering in some browsers
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Asia/Dhaka
-      - CUSTOM_USER=gkibria
-      - PASSWORD=gkibria121 # optional, set a password for web UI access
-    volumes:
-      -  ~/.config:/config
-      - /mnt/backup/courses/Audiobooks:/books 
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.calibre.rule=Host(`calibre.gkibria121.com`)"
-      - "traefik.http.routers.calibre.entrypoints=web"
-      - "traefik.http.services.calibre.loadbalancer.server.port=8080"
-    restart: unless-stopped
-    networks:
-      - traefik-network
+      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080" 
   koodo-reader:
     image: ghcr.io/koodo-reader/koodo-reader:master
     container_name: koodo-reader
@@ -150,24 +128,18 @@ services:
       ENABLE_OPDS: "true"                  # set false if you don't need OPDS
       ENABLE_KOREADER_SERVER: "true"       # set false if you don't need KOReader sync
       ENABLE_KOREADER_REGISTRATION: "false"
-      ALLOWED_ORIGINS: "https://koodo.gkibria121.com,https://koodo-data.gkibria121.com" 
+      ALLOWED_ORIGINS: "https://koodo.gkibria121.com,https://koodo-data.gkibria121.com,http://koodo.gkibria121.com,http://koodo-data.gkibria121.com" 
     volumes:
       - /mnt/backup/courses/Audiobooks:/app/uploads
     ports:
-      - "80:80"        # web UI (only needed if not routing through Traefik)
-      - "8080:8080"    # data source / OPDS
-      - "7200:7200"    # KOReader sync server
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.koodo.rule=Host(`koodo.gkibria121.com`)"
-      - "traefik.http.routers.koodo.entrypoints=web" 
-      - "traefik.http.services.koodo.loadbalancer.server.port=80"
-      # If you want the data source (8080) exposed on its own subdomain too:
-      - "traefik.http.routers.koodo-data.rule=Host(`koodo-data.gkibria121.com`)"
-      - "traefik.http.routers.koodo-data.entrypoints=web" 
-      - "traefik.http.services.koodo-data.loadbalancer.server.port=8080"
+      - "80:80"        # web UI (only needed if not routing through Traefik)  
     networks:
       - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.koodo-reader.rule=Host(`koodo-reader.gkibria121.com`)"
+      - "traefik.http.routers.koodo-reader.entrypoints=web"
+      - "traefik.http.services.koodo-reader.loadbalancer.server.port=8080" 
 
 
 volumes:
