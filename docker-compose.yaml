@@ -16,21 +16,7 @@ services:
     networks:
       - traefik-network
     restart: unless-stopped
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@local.com}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-    networks:
-      - traefik-network
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.pgadmin.rule=Host(`pg-admin.gkibria121.com`)"
-      - "traefik.http.routers.pgadmin.entrypoints=web"
-      - "traefik.http.services.pgadmin.loadbalancer.server.port=80"
-
+      
   filebrowser:
     image: filebrowser/filebrowser:latest
     container_name: filebrowser
@@ -40,8 +26,7 @@ services:
       - PGID=1000
       - TZ=Asia/Dhaka
     volumes:
-      - /mnt/storage/filebrowser/data/files:/srv
-      - "/mnt/backup:/srv/PC Backup"
+      - /mnt/storage:/srv
       - /mnt/storage/filebrowser.db:/database.db
       - /mnt/storage/filebrowser/filebrowser-config.json:/config.json
 
@@ -82,10 +67,9 @@ services:
     volumes:
       - ~/.audiobooks/config:/config
       - ~/.audiobooks/metadata:/metadata
-      - /mnt/backup/courses/Audiobooks:/audiobooks
-      - /mnt/backup/courses/podcasts:/podcasts
+      - /mnt/backup/books:/audiobooks
     environment:
-      - TZ=America/Toronto
+      - TZ=Asia/Dhaka
     restart: unless-stopped 
     networks:
       - traefik-network
@@ -106,7 +90,8 @@ services:
       - TORRENTING_PORT=21439
     volumes:
       - ~/.config:/config
-      - /mnt/backup/courses/Audiobooks:/downloads   # change to your actual downloads path
+      - /mnt/backup/downloads:/downloads   # change to your actual downloads path
+      - /mnt/backup/books:/books
     ports:
       - "21439:21439"        # torrent traffic - TCP
       - "21439:21439/udp"    # torrent traffic - UDP
@@ -117,37 +102,28 @@ services:
       - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.gkibria121.com`)"
       - "traefik.http.routers.qbittorrent.entrypoints=web"
       - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080" 
-  koodo-reader:
-        image: ghcr.io/koodo-reader/koodo-reader:master
-        container_name: koodo-reader
-        restart: unless-stopped
-        environment:
-          ENABLE_HTTP_SERVER: "true"
-          SERVER_USERNAME: "gkibria"
-          SERVER_PASSWORD: "gkibria121"
-          ENABLE_OPDS: "true"
-          ENABLE_KOREADER_SERVER: "true"
-          ENABLE_KOREADER_REGISTRATION: "false"
-          ALLOWED_ORIGINS: "http://koodo-reader.gkibria121.com,http://koodo-data.gkibria121.com"
-        volumes:
-          - /mnt/backup/courses/Audiobooks:/app/uploads
-        networks:
-          - traefik-network
-        labels:
-          - "traefik.enable=true"
-          - "traefik.docker.network=traefik-network"
+        
+  kavita:
+    image: lscr.io/linuxserver/kavita:latest
+    container_name: kavita
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Dhaka
+    volumes:
+      - ~/.kavita/config:/config
+      - /mnt/backup/books:/data #optional
+    restart: unless-stopped   
 
-          # Web UI router -> explicitly bound to koodo-reader service
-          - "traefik.http.routers.koodo-reader.rule=Host(`koodo-reader.gkibria121.com`)"
-          - "traefik.http.routers.koodo-reader.entrypoints=web"
-          - "traefik.http.routers.koodo-reader.service=koodo-reader"
-          - "traefik.http.services.koodo-reader.loadbalancer.server.port=80"
+    networks:
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.kavita.rule=Host(`kavita.gkibria121.com`)"
+      - "traefik.http.routers.kavita.entrypoints=web"
+      - "traefik.http.services.kavita.loadbalancer.server.port=5000" 
 
-          # Data source router -> explicitly bound to koodo-data service
-          - "traefik.http.routers.koodo-data.rule=Host(`koodo-data.gkibria121.com`)"
-          - "traefik.http.routers.koodo-data.entrypoints=web"
-          - "traefik.http.routers.koodo-data.service=koodo-data"
-          - "traefik.http.services.koodo-data.loadbalancer.server.port=8080"
+
 
 volumes:
   
