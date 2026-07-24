@@ -26,7 +26,7 @@ services:
       - PGID=1000
       - TZ=Asia/Dhaka
     volumes:
-      - /mnt/storage:/srv
+      - /mnt/backup:/srv
       - /mnt/storage/filebrowser.db:/database.db
       - /mnt/storage/filebrowser/filebrowser-config.json:/config.json
 
