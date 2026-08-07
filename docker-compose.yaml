@@ -97,7 +97,7 @@ services:
       - "21439:21439/udp"    # torrent traffic - UDP
       - "8085:8080"
       - "9000:9000"
-      - "9000:9000/udp
+      - "9000:9000/udp"
     networks:
       - traefik-network
     labels:
