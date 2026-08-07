@@ -102,10 +102,16 @@ services:
       - traefik-network
     labels:
       - "traefik.enable=true"
+      # --- WebUI router (existing) ---
       - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.gkibria121.com`)"
       - "traefik.http.routers.qbittorrent.entrypoints=web"
-      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080" 
-        
+      - "traefik.http.routers.qbittorrent.service=qbittorrent"
+      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
+      # --- Tracker router (new, port 9000) ---
+      - "traefik.http.routers.qbittorrent-tracker.rule=Host(`tracker.gkibria121.com`)"
+      - "traefik.http.routers.qbittorrent-tracker.entrypoints=web"
+      - "traefik.http.routers.qbittorrent-tracker.service=qbittorrent-tracker"
+      - "traefik.http.services.qbittorrent-tracker.loadbalancer.server.port=9000" 
   kavita:
     image: lscr.io/linuxserver/kavita:latest
     container_name: kavita
