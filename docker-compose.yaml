@@ -26,9 +26,8 @@ services:
       - PGID=1000
       - TZ=Asia/Dhaka
     volumes:
-      - /mnt/backup:/srv
+      - /mnt/backup:/srv/filebrowser/data/files
       - /mnt/storage/filebrowser.db:/database.db
-      - /mnt/storage/filebrowser/filebrowser-config.json:/config.json
 
     restart: unless-stopped
     labels:
@@ -92,9 +91,13 @@ services:
       - ~/.config:/config
       - /mnt/backup/downloads:/downloads   # change to your actual downloads path
       - /mnt/backup/books:/books
+      - /mnt/backup/courses:/courses
     ports:
       - "21439:21439"        # torrent traffic - TCP
       - "21439:21439/udp"    # torrent traffic - UDP
+      - "8085:8080"
+      - "9000:9000"
+      - "9000:9000/udp
     networks:
       - traefik-network
     labels:
