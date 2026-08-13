@@ -139,7 +139,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-gkibria121@gmail.com}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-gkibria121}
     networks:
-      - app-network
+      - traefik-network
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     restart: unless-stopped
