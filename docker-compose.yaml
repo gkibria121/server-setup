@@ -154,6 +154,7 @@ volumes:
   postgres-data-production:
   sp_data:
   traefik-certs:
+  pgadmin_data:
 networks:
   traefik-network:
     external: true
