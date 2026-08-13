@@ -89,9 +89,10 @@ services:
       - TORRENTING_PORT=21439
     volumes:
       - ~/.config:/config
-      - /mnt/backup/downloads:/downloads   # change to your actual downloads path
+      - /mnt/seedbox/downloads:/downloads   # change to your actual downloads path
       - /mnt/backup/books:/books
       - /mnt/backup/courses:/courses
+      - /mnt/backup/torrents:/torrents
     ports:
       - "21439:21439"        # torrent traffic - TCP
       - "21439:21439/udp"    # torrent traffic - UDP
